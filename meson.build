@@ -63,8 +63,9 @@ endforeach
 # Defines that are required for torch compatibility                              #
 
 # ABI compatibility
-cxx11abi = run_command(python, ['-c', 'import torch; print(torch._C._GLIBCXX_USE_CXX11_ABI)']).stdout().strip()
-add_global_arguments('-D_GLIBCXX_USE_CXX11_ABI=@0@'.format(cxx11abi), language: 'cpp')
+cxx11abi = run_command(python, ['-c', 'import torch; print(torch._C._GLIBCXX_USE_CXX11_ABI)'], check: true).stdout().strip()
+cxx11abi = cxx11abi.to_lower().contains('true') ? 1 : 0
+add_project_arguments('-D_GLIBCXX_USE_CXX11_ABI=@0@'.format(cxx11abi), language: 'cpp')
 
 
 
